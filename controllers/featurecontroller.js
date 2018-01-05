@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var cat = mongoose.model('cat');
 var feature = mongoose.model('feature');
-
+var async = require('async');
 
 module.exports = {
 
