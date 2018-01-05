@@ -68,15 +68,12 @@ module.exports = {
         console.log(req.body);
         console.log('=================================================');
 
-        var catid;
-
         ipost(req.body)
             .then((id) => {
                 console.log('whithin return post');
                 console.log(id);
-                catid = id;
                 console.log('=================================================');
-                return fpost(catid, req.body);
+                return fpost(id, req.body);
             }).then(() => {
                     res.json({ message: 'Cat created!' });
             }).catch((error) => {
