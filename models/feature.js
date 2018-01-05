@@ -6,7 +6,8 @@ var featureSchema = new Schema({
 
     cat_id: { type: ObjectId, ref: 'cat' },
     cat_color: { type: String },
-    cat_type: { type: String }
+    cat_type: { type: String },
+    cat_eye: {type: String}
 
 });
 

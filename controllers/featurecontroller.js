@@ -35,12 +35,12 @@ module.exports = {
 
         console.log("in put method");
         feature.findOneAndUpdate({ _id: req.params.feature_id },
-            { $set: { cat_color: req.body.color, cat_type: req.body.type } }, { new: true },
+            { $set: { cat_color: req.body.color, cat_type: req.body.type, cat_eye: req.body.eye } }, { new: true },
             function (err, rule) {
                 if (err)
                     return res.status(400).json(err)
                 else {
-                    return res.status(200).json({ status: true, message: "Color and Type Updated", data: rule })
+                    return res.status(200).json({ status: true, message: "Color,Type and Eye_color Updated", data: rule })
                 }
             });
 

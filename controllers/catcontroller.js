@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var cat = mongoose.model('cat');
 var feature = mongoose.model('feature');
+var async = require('async');
 
 
 module.exports = {
@@ -31,6 +32,9 @@ module.exports = {
 
         var icat = new cat();      // create a new instance of the Cat model
         icat.name = req.body.name; // set the cats name (comes from the request)
+        icat.age = req.body.age;
+        icat.owner = req.body.owner;
+
 
         // save the cat and check for errors
         icat.save(function (err) {
@@ -42,7 +46,8 @@ module.exports = {
                     {
                         cat_id: icat._id,
                         cat_color: req.body.color,
-                        cat_type: req.body.type
+                        cat_type: req.body.type,
+                        cat_eye: req.body.eye
                     }
                 )
                 ifeature.save(function (err) {
@@ -61,11 +66,11 @@ module.exports = {
         console.log("in put method");
         cat.findOneAndUpdate({ _id: req.params.cat_id },
             { $set: { name: req.body.name } }, { new: true },
-            function (err, rule) {
+            function (err, details) {
                 if (err)
                     return res.status(400).json(err)
                 else {
-                    return res.status(200).json({ status: true, message: "Name Updated", data: rule })
+                    return res.status(200).json({ status: true, message: "Name Updated", data: details })
                 }
             });
     },
@@ -74,7 +79,7 @@ module.exports = {
 
         console.log("in delete method");
         cat.findOne({ _id: req.params.cat_id })
-            .remove(function (err, rule) {
+            .remove(function (err, details) {
                 if (err) {
                     return res.status(400).json({ status: false, message: 'Databse error', data: err })
                 }
