@@ -65,12 +65,12 @@ module.exports = {
 
         console.log("in put method");
         cat.findOneAndUpdate({ _id: req.params.cat_id },
-            { $set: { name: req.body.name } }, { new: true },
+            { $set: { name: req.body.name, age: req.body.age, owner: req.body.owner } }, { new: true },
             function (err, details) {
                 if (err)
                     return res.status(400).json(err)
                 else {
-                    return res.status(200).json({ status: true, message: "Name Updated", data: details })
+                    return res.status(200).json({ status: true, message: "Name,Age and Owner Updated", data: details })
                 }
             });
     },
