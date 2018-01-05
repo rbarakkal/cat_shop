@@ -25,40 +25,63 @@ module.exports = {
         });
     },
 
-    catpost: function (req, res) {
+    // catpost: function (req, res) {
 
+    //     console.log("in post method");
+    //     console.log(req.body);
+
+    //     var icat = new cat();      // create a new instance of the Cat model
+    //     icat.name = req.body.name; // set the cats name (comes from the request)
+    //     icat.age = req.body.age;
+    //     icat.owner = req.body.owner;
+
+
+    //     // save the cat and check for errors
+    //     icat.save(function (err) {
+    //         if (err)
+    //             res.send(err);
+    //         else {
+
+    //             var ifeature = new feature(
+    //                 {
+    //                     cat_id: icat._id,
+    //                     cat_color: req.body.color,
+    //                     cat_type: req.body.type,
+    //                     cat_eye: req.body.eye
+    //                 }
+    //             )
+    //             ifeature.save(function (err) {
+    //                 if (err)
+    //                     res.send(err);
+    //                 else
+    //                     res.json({ message: 'Cat created!' });
+    //             });
+
+    //         }
+    //     });
+    // },
+
+
+
+    catpost: function (req, res) {
         console.log("in post method");
         console.log(req.body);
+        console.log('=================================================');
 
-        var icat = new cat();      // create a new instance of the Cat model
-        icat.name = req.body.name; // set the cats name (comes from the request)
-        icat.age = req.body.age;
-        icat.owner = req.body.owner;
+        var catid;
 
-
-        // save the cat and check for errors
-        icat.save(function (err) {
-            if (err)
-                res.send(err);
-            else {
-
-                var ifeature = new feature(
-                    {
-                        cat_id: icat._id,
-                        cat_color: req.body.color,
-                        cat_type: req.body.type,
-                        cat_eye: req.body.eye
-                    }
-                )
-                ifeature.save(function (err) {
-                    if (err)
-                        res.send(err);
-                    else
-                        res.json({ message: 'Cat created!' });
-                });
-
-            }
-        });
+        ipost(req.body)
+            .then((id) => {
+                console.log('whithin return post');
+                console.log(id);
+                catid = id;
+                console.log('=================================================');
+                return fpost(catid, req.body);
+            }).then(() => {
+                    res.json({ message: 'Cat created!' });
+            }).catch((error) => {
+                return res.status(400).json(error)
+            });
     },
 
     catput: function (req, res) {
@@ -88,4 +111,51 @@ module.exports = {
                 }
             });
     }
+}
+
+
+
+//===================Helper Functions==================
+var ipost = function (data) {
+    console.log('request within ipost');
+    console.log(data);
+    console.log('=================================================');
+    return new Promise(function (resolve, reject) {
+        var icat = new cat();      // create a new instance of the Cat model
+        icat.name = data.name; // set the cats name (comes from the request)
+        icat.age = data.age;
+        icat.owner = data.owner;
+        // save the cat and check for errors
+        icat.save(function (err) {
+            if (err)
+                reject(err);
+            else {
+                resolve(icat._id);
+            }
+        });
+    });
+}
+
+var fpost = function (fdata, data) {
+    console.log('_id within fpost');
+    console.log(fdata);
+    console.log('=================================================');
+    return new Promise(function (resolve, reject) {
+        var ifeature = new feature(
+            {
+                cat_id: fdata,
+                cat_color: data.color,
+                cat_type: data.type,
+                cat_eye: data.eye
+            }
+        )
+        // save the cat and check for errors
+        ifeature.save(function (err) {
+            if (err)
+                reject(err);
+            else {
+                resolve();
+            }
+        });
+    });
 }
